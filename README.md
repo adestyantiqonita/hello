@@ -21,3 +21,10 @@ Pada milestone ini, server mulai memvalidasi request dan memberikan response yan
 Server membedakan request valid (`GET / HTTP/1.1`) dan tidak valid. Jika valid, server mengembalikan `hello.html` dengan status `200 OK`. Jika tidak, server mengembalikan `404.html` dengan status `404 NOT FOUND`.
 Refactoring dilakukan menggunakan tuple `(status_line, filename)` agar kode lebih ringkas dan tidak repetitif. Jadi, perbedaan hanya pada status dan file, sementara proses membaca file dan mengirim response tetap sama.
 Dari situ bisa dilihat bahwa struktur kode jadi lebih clean dan mudah dikembangkan.
+
+## Commit 4 Reflection Notes
+
+Pada milestone ini, dilakukan simulasi slow response pada server.
+Ketika endpoint `/sleep` diakses, server akan menunggu selama 10 detik sebelum memberikan response. Karena server masih single-threaded, request lain yang masuk selama proses ini tidak bisa diproses.
+Hal ini terlihat saat membuka dua tab browser: request ke `/` harus menunggu hingga request `/sleep` selesai.
+Dari situ bisa dilihat bahwa single-threaded server tidak efisien untuk menangani banyak request secara bersamaan. Karena itu, diperlukan multithreading agar setiap request bisa diproses secara paralel.
