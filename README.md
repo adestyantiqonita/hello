@@ -35,3 +35,12 @@ Pada milestone ini, server ditingkatkan menjadi multithreaded menggunakan Thread
 ThreadPool dibuat dengan 4 worker. Setiap request dikirim sebagai job melalui channel `mpsc`, lalu diambil oleh worker yang tersedia. Untuk memastikan akses aman antar thread, digunakan `Arc<Mutex<>>` pada receiver.
 Saat server menerima request, `pool.execute()` akan mengirim job ke worker yang idle untuk diproses.
 Hasilnya, beberapa request bisa diproses secara bersamaan. Dari situ terlihat bahwa multithreaded server jauh lebih efisien dibanding single-threaded karena tidak saling blocking.
+
+## Commit Bonus Reflection Notes
+
+Pada bagian ini, dibuat fungsi `build` sebagai alternatif dari `new` pada ThreadPool.
+Perbedaannya:
+- `new` → menggunakan `assert!` dan akan panic jika size = 0
+- `build` → mengembalikan `Result<ThreadPool, String>` sehingga error bisa ditangani
+Dengan `build`, pemanggil fungsi punya kontrol lebih terhadap error, misalnya menggunakan `unwrap_or_else` untuk memberikan pesan yang lebih informatif.
+Dari situ bisa dilihat bahwa pendekatan ini lebih idiomatik dalam Rust, karena menghindari panic dan memberikan fleksibilitas dalam error handling.
