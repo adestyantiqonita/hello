@@ -28,3 +28,10 @@ Pada milestone ini, dilakukan simulasi slow response pada server.
 Ketika endpoint `/sleep` diakses, server akan menunggu selama 10 detik sebelum memberikan response. Karena server masih single-threaded, request lain yang masuk selama proses ini tidak bisa diproses.
 Hal ini terlihat saat membuka dua tab browser: request ke `/` harus menunggu hingga request `/sleep` selesai.
 Dari situ bisa dilihat bahwa single-threaded server tidak efisien untuk menangani banyak request secara bersamaan. Karena itu, diperlukan multithreading agar setiap request bisa diproses secara paralel.
+
+## Commit 5 Reflection Notes
+
+Pada milestone ini, server ditingkatkan menjadi multithreaded menggunakan ThreadPool.
+ThreadPool dibuat dengan 4 worker. Setiap request dikirim sebagai job melalui channel `mpsc`, lalu diambil oleh worker yang tersedia. Untuk memastikan akses aman antar thread, digunakan `Arc<Mutex<>>` pada receiver.
+Saat server menerima request, `pool.execute()` akan mengirim job ke worker yang idle untuk diproses.
+Hasilnya, beberapa request bisa diproses secara bersamaan. Dari situ terlihat bahwa multithreaded server jauh lebih efisien dibanding single-threaded karena tidak saling blocking.
