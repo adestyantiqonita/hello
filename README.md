@@ -14,3 +14,10 @@ Pada milestone ini, server ditambahkan kemampuan untuk mengirim response HTML ke
 Method `handle_connection` diperbarui dengan membaca file menggunakan `fs::read_to_string("hello.html")`. Response HTTP kemudian disusun dari beberapa bagian: status line (`HTTP/1.1 200 OK`), header `Content-Length`, dan body berupa isi HTML.
 Format response harus mengikuti standar HTTP, yaitu setiap bagian dipisahkan dengan `\r\n`.
 Setelah itu, `stream.write_all()` digunakan untuk mengirim response ke browser, sehingga halaman HTML dapat dirender. Dari situ bisa dilihat bagaimana server mulai tidak hanya menerima request, tapi juga memberikan response yang sesuai.
+
+## Commit 3 Reflection Notes
+
+Pada milestone ini, server mulai memvalidasi request dan memberikan response yang sesuai.
+Server membedakan request valid (`GET / HTTP/1.1`) dan tidak valid. Jika valid, server mengembalikan `hello.html` dengan status `200 OK`. Jika tidak, server mengembalikan `404.html` dengan status `404 NOT FOUND`.
+Refactoring dilakukan menggunakan tuple `(status_line, filename)` agar kode lebih ringkas dan tidak repetitif. Jadi, perbedaan hanya pada status dan file, sementara proses membaca file dan mengirim response tetap sama.
+Dari situ bisa dilihat bahwa struktur kode jadi lebih clean dan mudah dikembangkan.
